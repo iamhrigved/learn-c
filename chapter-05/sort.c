@@ -13,6 +13,7 @@ void print_help();
 /* Main functions */
 int get_line(char *linesptr[]);
 int sort(char *linesptr[], int num_of_line, int (*func)(char *, char *));
+/* ^^ Takes a pointer to the comparision function to use */
 
 /* Utility functions */
 int len_line(char line[]);
@@ -33,11 +34,13 @@ int main(int argc, char **argv) {
     /* Handling command-line arguments */
     for (int i = 1; i < argc; i++) {
 
-        if (str_cmp(argv[i], "--copy") == 0 || str_cmp(argv[i], "-c") == 0)
+        if (str_cmp(argv[i], "--copy") == 0 || str_cmp(argv[i], "-c") == 0) {
             copy_mode = 1;
+            continue;
+        }
 
-        if (result != 0)
-            continue; /* Already sorted */
+        if (result != 0) /* Already sorted */
+            continue;
 
         if (str_cmp(argv[i], "--help") == 0 || str_cmp(argv[i], "-h") == 0) {
             print_help();
@@ -48,7 +51,7 @@ int main(int argc, char **argv) {
                  str_cmp(argv[i], "-l") == 0) {
             result = sort(linesptr, num_of_lines, len_line_diff);
             if (result == ERRORNUM)
-                break;
+                return 1;
             printf("\nSorted by Length:\n");
         }
 
@@ -56,7 +59,7 @@ int main(int argc, char **argv) {
                  str_cmp(argv[i], "-n") == 0) {
             result = sort(linesptr, num_of_lines, difference);
             if (result == ERRORNUM)
-                break;
+                return 1;
             printf("\nSorted Numerically:\n");
         }
 
@@ -64,26 +67,28 @@ int main(int argc, char **argv) {
                  str_cmp(argv[i], "-a") == 0) {
             result = sort(linesptr, num_of_lines, str_cmp);
             if (result == ERRORNUM)
-                break;
+                return 1;
             printf("\nSorted Alphabetically:\n");
         }
 
         /* Sorting by length (default) */
         else {
             result = sort(linesptr, num_of_lines, len_line_diff);
-            printf("\nPlease do `%s --help` to see help.", argv[0]);
+            printf("\nPlease do `%s --help` or `%s -h` to see help.", argv[0],
+                   argv[0]);
             if (result == ERRORNUM)
-                break;
+                return 1;
             printf("\nSorted by Length: (default)\n");
         }
     }
 
-    if (argc == 1) {
+    if (argc == 1) { /* When previous loop did not run */
         result = sort(linesptr, num_of_lines, len_line_diff);
         printf("\nSorted by Length: (default)\n");
     }
 
-    for (int i = 0; result != ERRORNUM && i < num_of_lines; i++) {
+    /* Printing the sorted list */
+    for (int i = 0; i < num_of_lines; i++) {
         if (copy_mode)
             printf("\n%s", linesptr[i]);
         else
@@ -151,7 +156,9 @@ long to_num(char *s) {
     if (s[0] == '-') {
         start = 1;
         sign = -1;
-    } else if (s[0] == '+')
+    }
+
+    else if (s[0] == '+')
         start = 1;
 
     for (i = len_line(s) - 1; i >= start; i--) {
