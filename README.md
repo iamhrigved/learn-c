@@ -24,14 +24,14 @@ source runc.sh
 
 ```bash
 cd ~/learn-c/chapter-01
-runc ./counting1.c # will generate the binary `chapter-01/counting1` and run it
+runc ./counting1.c # will generate the binary `chapter-01/executables/counting1` and run it
 ```
 
 OR
 
 ```bash
 cd ~/learn-c
-runc ./chapter-05/sort.c # will generate the binary `chapter-05/sort` and run it
+runc ./chapter-05/sort.c # will generate the binary `chapter-05/executables/sort` and run it
 ```
 
 #### Start leaning! 😉
