@@ -31,7 +31,7 @@ OR
 
 ```bash
 cd ~/learn-c
-runc ./chapter-05/sort.c # will generate the binary `chapter-05/executables/sort` and run it
+runc ./chapter-05/my_sort.c # will generate the binary `chapter-05/executables/my_sort` and run it
 ```
 
 #### Start leaning! 😉
