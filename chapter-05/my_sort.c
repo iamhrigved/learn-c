@@ -11,7 +11,7 @@ static char *allocp = allocbuf;
 void print_help();
 
 /* Main functions */
-int get_line(char *linesptr[]);
+int get_lines(char *linesptr[]);
 int sort(char *linesptr[], int num_of_line, int (*sort_func)(char *, char *));
 /* ^^ Takes a pointer to the comparision function to use */
 
@@ -48,7 +48,7 @@ int main(int argc, char **argv) {
         }
 
         if (str_cmp(argv[i], "--length") == 0 || str_cmp(argv[i], "-l") == 0) {
-            num_of_lines = get_line(linesptr);
+            num_of_lines = get_lines(linesptr);
             result = sort(linesptr, num_of_lines, len_line_diff);
             if (result == ERRORNUM)
                 return 1;
@@ -57,7 +57,7 @@ int main(int argc, char **argv) {
 
         else if (str_cmp(argv[i], "--number") == 0 ||
                  str_cmp(argv[i], "-n") == 0) {
-            num_of_lines = get_line(linesptr);
+            num_of_lines = get_lines(linesptr);
             result = sort(linesptr, num_of_lines, difference);
             if (result == ERRORNUM)
                 return 1;
@@ -66,7 +66,7 @@ int main(int argc, char **argv) {
 
         else if (str_cmp(argv[i], "--alphabetical") == 0 ||
                  str_cmp(argv[i], "-a") == 0) {
-            num_of_lines = get_line(linesptr);
+            num_of_lines = get_lines(linesptr);
             result = sort(linesptr, num_of_lines, str_cmp);
             if (result == ERRORNUM)
                 return 1;
@@ -75,7 +75,7 @@ int main(int argc, char **argv) {
 
         /* Sorting by length (default) */
         else {
-            num_of_lines = get_line(linesptr);
+            num_of_lines = get_lines(linesptr);
             result = sort(linesptr, num_of_lines, len_line_diff);
             printf("\nPlease do `%s --help` or `%s -h` to see help.", argv[0],
                    argv[0]);
@@ -86,7 +86,7 @@ int main(int argc, char **argv) {
     }
 
     if (argc == 1) { /* When previous loop did not run */
-        num_of_lines = get_line(linesptr);
+        num_of_lines = get_lines(linesptr);
         result = sort(linesptr, num_of_lines, len_line_diff);
         printf("\nSorted by Length: (default)\n");
     }
@@ -115,7 +115,7 @@ void print_help() {
 }
 /* clang-format on */
 
-int get_line(char *linesptr[]) {
+int get_lines(char *linesptr[]) {
     int i, j;
     char c, *line = alloc(400);
 
