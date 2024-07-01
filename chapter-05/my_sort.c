@@ -20,7 +20,7 @@ int len_line(char line[]);
 int len_line_diff(char *s, char *t);
 int difference(char *s, char *t);
 int str_cmp(char *s, char *t);
-long to_num(char *s);
+double to_num(char *s);
 
 /* Alloc functions */
 char *alloc(int n);
@@ -109,7 +109,7 @@ void print_help() {
     printf("Sorting options:\n\n");
     printf("  -l, --length        (default) Order the lines by their Length\n");
     printf("  -a, --alphabetical  Order the lines Alphabetically\n");
-    printf("  -n, --number        Order Numbers\n");
+    printf("  -n, --number        Order Numbers (including float)\n");
     printf("  -c, --copy          Enable copy_mode which ommits the line numbers in the output\n");
     printf("  -h, --help          Show help message\n");
 }
@@ -164,37 +164,50 @@ int sort(char *linesptr[], int num_of_line, int (*sort_func)(char *, char *)) {
     return 1; /* If sorting successful */
 }
 
-long to_num(char *s) {
-    long final_num = 0;
-    int sign = 1, i, start;
+double to_num(char *s) {
+    double final_num = 0, power_10 = 1;
+    int sign = 1, i = 0, num_dots = 0;
 
     if (s[0] == '-') {
-        start = 1;
+        i += 1;
         sign = -1;
     }
 
     else if (s[0] == '+')
-        start = 1;
+        i += 1;
 
-    for (i = len_line(s) - 1; i >= start; i--) {
-        if (s[i] <= '0' || s[i] > '9') {
-            printf("\n%s <- Invalid Number!", s);
+    for (; i < len_line(s); i++) {
+
+        if (s[i] == '.')
+            num_dots++;
+        else
+            final_num = final_num * 10 + (s[i] - '0');
+
+        if (!(s[i] >= '0' && s[i] <= '9') && s[i] != '.') {
+            printf("\nERROR: %s <- Invalid Number!", s);
             return ERRORNUM;
         }
-        final_num = final_num * 10 + s[i] - '0';
+
+        if (num_dots > 1) {
+            printf("\nERROR: %s <- Invalid Number!", s);
+            return ERRORNUM;
+        }
+
+        if (num_dots == 1 && s[i] != '.')
+            power_10 *= 10;
     }
-    return sign * final_num;
+    return sign * final_num / power_10;
 }
 
 int difference(char *s, char *t) {
-    long first_num;
-    long second_num;
+    double first_num;
+    double second_num;
 
     if ((first_num = to_num(s)) == ERRORNUM ||
         (second_num = to_num(t)) == ERRORNUM)
         return ERRORNUM;
 
-    return first_num - second_num;
+    return (first_num > second_num);
 }
 
 int str_cmp(char *s, char *t) {
