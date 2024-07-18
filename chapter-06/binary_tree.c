@@ -11,7 +11,6 @@ struct tree_node {
 };
 
 char **get_word();
-struct tree_node *add_word_to_tree(struct tree_node *search_node, char *word);
 struct tree_node *search_and_insert(struct tree_node *tree_root,
                                     char *search_word);
 void print_tree(struct tree_node *tree_root);
