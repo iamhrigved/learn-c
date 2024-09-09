@@ -7,20 +7,24 @@ runc() {
 	local is_local=""
 	local exe_file_location=""
 
-	if [[ $file_directory == "." ]] then 
+	if [[ $file_directory == "." ]]; then 
 		is_local=true
 	else
 		is_local=false
 	fi
 
-	if [[ $(ls $file_directory/ | grep -i -o "executables") == "" ]] then
-		mkdir $file_directory/executables
-		echo "New directory created $file_directory/executables"
-	fi
+    # if the file compiles without any errors this will run
+    local run() {
+            # if executables directory does not exist
+            if [[ $(ls $file_directory/ | grep -i -o "executables") == "" ]] then;
+                mkdir $file_directory/executables &&
+                echo "New directory created $file_directory/executables"
+            fi
 
-	exe_file_location="$file_directory/executables/$exe_file_name"
-
-	echo ""
-	gcc $file_location -o $exe_file_location && $exe_file_location ${@:2}
-	echo ""
+            mv ./a.out ./executables/$exe_file_name
+            echo "" # printing new lines
+            ./executables/$exe_file_name
+            echo ""
+    }
+    g++ $file_location && run
 }
