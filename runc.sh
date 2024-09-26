@@ -3,7 +3,7 @@
 # run `source runc.sh` and then use this funcion anywhere
 runc() {
 	local file_location=$1
-    local file_type=$(echo $file_location | sed "s/.*\.\(.*\)/\1/" | sed "s/p/+/g") # `c` or `cpp`
+    local file_type=$(echo $file_location | sed "s/.*\.\(.*\)/\1/" | sed "s/p/+/g") # `c` or `c++`
 	local file_name=${1:t}
 	local file_directory=${1:h}
 	local exe_file_name=${file_name:r}
